@@ -1,0 +1,584 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SPRModels.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="SPR_DataFeed">
+          <Key>
+            <PropertyRef Name="ReportID" />
+          </Key>
+          <Property Name="ReportID" Type="bigint" Nullable="false" />
+          <Property Name="Source" Type="varchar" MaxLength="10" />
+          <Property Name="StatementText" Type="varchar(max)" />
+          <Property Name="LiveReportID" Type="bigint" />
+        </EntityType>
+        <EntityType Name="SPR_ReportAssets">
+          <Key>
+            <PropertyRef Name="ReportID" />
+          </Key>
+          <Property Name="ReportID" Type="bigint" Nullable="false" />
+          <Property Name="Image" Type="varbinary(max)" />
+          <Property Name="PDF" Type="varbinary(max)" />
+          <Property Name="IsFromDesign" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SPR_Reports">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SPR_ReportSettings">
+          <Key>
+            <PropertyRef Name="ReportID" />
+          </Key>
+          <Property Name="ReportID" Type="bigint" Nullable="false" />
+          <Property Name="SettingText" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="SPR_Tasks">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReportID" Type="bigint" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SPR_Trigger_Daily">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TaskID" Type="bigint" Nullable="false" />
+          <Property Name="StartDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SPR_Trigger_Monthly">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TaskID" Type="bigint" Nullable="false" />
+          <Property Name="StartDateTime" Type="datetime" />
+          <Property Name="IsModeDays" Type="bit" Nullable="false" />
+          <Property Name="IsModeOn" Type="bit" Nullable="false" />
+          <Property Name="MonthsOfYear" Type="varchar" MaxLength="48" />
+          <Property Name="DaysOfMonth" Type="varchar" MaxLength="131" />
+          <Property Name="TargetedWeek" Type="varchar" MaxLength="21" />
+          <Property Name="DaysOfTargetedWeek" Type="varchar" MaxLength="28" />
+        </EntityType>
+        <EntityType Name="SPR_Trigger_Once">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TaskID" Type="bigint" Nullable="false" />
+          <Property Name="StartDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SPR_Trigger_Weekly">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TaskID" Type="bigint" Nullable="false" />
+          <Property Name="StartDateTime" Type="datetime" />
+          <Property Name="WeekFrequency" Type="int" Nullable="false" />
+          <Property Name="DaysOfWeek" Type="varchar" MaxLength="28" />
+        </EntityType>
+        <Association Name="FK_SPR_DataFeed_ReportID">
+          <End Role="SPR_Reports" Type="Self.SPR_Reports" Multiplicity="1" />
+          <End Role="SPR_DataFeed" Type="Self.SPR_DataFeed" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="SPR_Reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SPR_DataFeed">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SPR_ReportAssets_ReportID">
+          <End Role="SPR_Reports" Type="Self.SPR_Reports" Multiplicity="1" />
+          <End Role="SPR_ReportAssets" Type="Self.SPR_ReportAssets" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="SPR_Reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SPR_ReportAssets">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SPR_ReportSettings_ReportID">
+          <End Role="SPR_Reports" Type="Self.SPR_Reports" Multiplicity="1" />
+          <End Role="SPR_ReportSettings" Type="Self.SPR_ReportSettings" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="SPR_Reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SPR_ReportSettings">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SPR_Tasks_ReportID">
+          <End Role="SPR_Reports" Type="Self.SPR_Reports" Multiplicity="1" />
+          <End Role="SPR_Tasks" Type="Self.SPR_Tasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SPR_Reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SPR_Tasks">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SPR_Trigger_Daily_TaskID">
+          <End Role="SPR_Tasks" Type="Self.SPR_Tasks" Multiplicity="1" />
+          <End Role="SPR_Trigger_Daily" Type="Self.SPR_Trigger_Daily" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SPR_Tasks">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SPR_Trigger_Daily">
+              <PropertyRef Name="TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SPR_Trigger_Monthly_TaskID">
+          <End Role="SPR_Tasks" Type="Self.SPR_Tasks" Multiplicity="1" />
+          <End Role="SPR_Trigger_Monthly" Type="Self.SPR_Trigger_Monthly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SPR_Tasks">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SPR_Trigger_Monthly">
+              <PropertyRef Name="TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SPR_Trigger_Once_TaskID">
+          <End Role="SPR_Tasks" Type="Self.SPR_Tasks" Multiplicity="1" />
+          <End Role="SPR_Trigger_Once" Type="Self.SPR_Trigger_Once" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SPR_Tasks">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SPR_Trigger_Once">
+              <PropertyRef Name="TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SPR_Trigger_Weekly_TaskID">
+          <End Role="SPR_Tasks" Type="Self.SPR_Tasks" Multiplicity="1" />
+          <End Role="SPR_Trigger_Weekly" Type="Self.SPR_Trigger_Weekly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SPR_Tasks">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SPR_Trigger_Weekly">
+              <PropertyRef Name="TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SPRModelsStoreContainer">
+          <EntitySet Name="SPR_DataFeed" EntityType="Self.SPR_DataFeed" Schema="csdb_user" store:Type="Tables" />
+          <EntitySet Name="SPR_ReportAssets" EntityType="Self.SPR_ReportAssets" Schema="csdb_user" store:Type="Tables" />
+          <EntitySet Name="SPR_Reports" EntityType="Self.SPR_Reports" Schema="csdb_user" store:Type="Tables" />
+          <EntitySet Name="SPR_ReportSettings" EntityType="Self.SPR_ReportSettings" Schema="csdb_user" store:Type="Tables" />
+          <EntitySet Name="SPR_Tasks" EntityType="Self.SPR_Tasks" Schema="csdb_user" store:Type="Tables" />
+          <EntitySet Name="SPR_Trigger_Daily" EntityType="Self.SPR_Trigger_Daily" Schema="csdb_user" store:Type="Tables" />
+          <EntitySet Name="SPR_Trigger_Monthly" EntityType="Self.SPR_Trigger_Monthly" Schema="csdb_user" store:Type="Tables" />
+          <EntitySet Name="SPR_Trigger_Once" EntityType="Self.SPR_Trigger_Once" Schema="csdb_user" store:Type="Tables" />
+          <EntitySet Name="SPR_Trigger_Weekly" EntityType="Self.SPR_Trigger_Weekly" Schema="csdb_user" store:Type="Tables" />
+          <AssociationSet Name="FK_SPR_DataFeed_ReportID" Association="Self.FK_SPR_DataFeed_ReportID">
+            <End Role="SPR_Reports" EntitySet="SPR_Reports" />
+            <End Role="SPR_DataFeed" EntitySet="SPR_DataFeed" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SPR_ReportAssets_ReportID" Association="Self.FK_SPR_ReportAssets_ReportID">
+            <End Role="SPR_Reports" EntitySet="SPR_Reports" />
+            <End Role="SPR_ReportAssets" EntitySet="SPR_ReportAssets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SPR_ReportSettings_ReportID" Association="Self.FK_SPR_ReportSettings_ReportID">
+            <End Role="SPR_Reports" EntitySet="SPR_Reports" />
+            <End Role="SPR_ReportSettings" EntitySet="SPR_ReportSettings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SPR_Tasks_ReportID" Association="Self.FK_SPR_Tasks_ReportID">
+            <End Role="SPR_Reports" EntitySet="SPR_Reports" />
+            <End Role="SPR_Tasks" EntitySet="SPR_Tasks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SPR_Trigger_Daily_TaskID" Association="Self.FK_SPR_Trigger_Daily_TaskID">
+            <End Role="SPR_Tasks" EntitySet="SPR_Tasks" />
+            <End Role="SPR_Trigger_Daily" EntitySet="SPR_Trigger_Daily" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SPR_Trigger_Monthly_TaskID" Association="Self.FK_SPR_Trigger_Monthly_TaskID">
+            <End Role="SPR_Tasks" EntitySet="SPR_Tasks" />
+            <End Role="SPR_Trigger_Monthly" EntitySet="SPR_Trigger_Monthly" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SPR_Trigger_Once_TaskID" Association="Self.FK_SPR_Trigger_Once_TaskID">
+            <End Role="SPR_Tasks" EntitySet="SPR_Tasks" />
+            <End Role="SPR_Trigger_Once" EntitySet="SPR_Trigger_Once" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SPR_Trigger_Weekly_TaskID" Association="Self.FK_SPR_Trigger_Weekly_TaskID">
+            <End Role="SPR_Tasks" EntitySet="SPR_Tasks" />
+            <End Role="SPR_Trigger_Weekly" EntitySet="SPR_Trigger_Weekly" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SPRModels" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="SPR_DataFeed">
+          <Key>
+            <PropertyRef Name="ReportID" />
+          </Key>
+          <Property Name="ReportID" Type="Int64" Nullable="false" />
+          <Property Name="Source" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="StatementText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LiveReportID" Type="Int64" />
+          <NavigationProperty Name="SPR_Reports" Relationship="Self.FK_SPR_DataFeed_ReportID" FromRole="SPR_DataFeed" ToRole="SPR_Reports" />
+        </EntityType>
+        <EntityType Name="SPR_ReportAssets">
+          <Key>
+            <PropertyRef Name="ReportID" />
+          </Key>
+          <Property Name="ReportID" Type="Int64" Nullable="false" />
+          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="PDF" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="SPR_Reports" Relationship="Self.FK_SPR_ReportAssets_ReportID" FromRole="SPR_ReportAssets" ToRole="SPR_Reports" />
+          <Property Name="IsFromDesign" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SPR_Reports">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SPR_DataFeed" Relationship="Self.FK_SPR_DataFeed_ReportID" FromRole="SPR_Reports" ToRole="SPR_DataFeed" />
+          <NavigationProperty Name="SPR_ReportAssets" Relationship="Self.FK_SPR_ReportAssets_ReportID" FromRole="SPR_Reports" ToRole="SPR_ReportAssets" />
+          <NavigationProperty Name="SPR_ReportSettings" Relationship="Self.FK_SPR_ReportSettings_ReportID" FromRole="SPR_Reports" ToRole="SPR_ReportSettings" />
+          <NavigationProperty Name="SPR_Tasks" Relationship="Self.FK_SPR_Tasks_ReportID" FromRole="SPR_Reports" ToRole="SPR_Tasks" />
+        </EntityType>
+        <EntityType Name="SPR_ReportSettings">
+          <Key>
+            <PropertyRef Name="ReportID" />
+          </Key>
+          <Property Name="ReportID" Type="Int64" Nullable="false" />
+          <Property Name="SettingText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="SPR_Reports" Relationship="Self.FK_SPR_ReportSettings_ReportID" FromRole="SPR_ReportSettings" ToRole="SPR_Reports" />
+        </EntityType>
+        <EntityType Name="SPR_Tasks">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReportID" Type="Int64" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SPR_Reports" Relationship="Self.FK_SPR_Tasks_ReportID" FromRole="SPR_Tasks" ToRole="SPR_Reports" />
+          <NavigationProperty Name="SPR_Trigger_Daily" Relationship="Self.FK_SPR_Trigger_Daily_TaskID" FromRole="SPR_Tasks" ToRole="SPR_Trigger_Daily" />
+          <NavigationProperty Name="SPR_Trigger_Monthly" Relationship="Self.FK_SPR_Trigger_Monthly_TaskID" FromRole="SPR_Tasks" ToRole="SPR_Trigger_Monthly" />
+          <NavigationProperty Name="SPR_Trigger_Once" Relationship="Self.FK_SPR_Trigger_Once_TaskID" FromRole="SPR_Tasks" ToRole="SPR_Trigger_Once" />
+          <NavigationProperty Name="SPR_Trigger_Weekly" Relationship="Self.FK_SPR_Trigger_Weekly_TaskID" FromRole="SPR_Tasks" ToRole="SPR_Trigger_Weekly" />
+        </EntityType>
+        <EntityType Name="SPR_Trigger_Daily">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskID" Type="Int64" Nullable="false" />
+          <Property Name="StartDateTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="SPR_Tasks" Relationship="Self.FK_SPR_Trigger_Daily_TaskID" FromRole="SPR_Trigger_Daily" ToRole="SPR_Tasks" />
+        </EntityType>
+        <EntityType Name="SPR_Trigger_Monthly">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskID" Type="Int64" Nullable="false" />
+          <Property Name="StartDateTime" Type="DateTime" Precision="3" />
+          <Property Name="IsModeDays" Type="Boolean" Nullable="false" />
+          <Property Name="IsModeOn" Type="Boolean" Nullable="false" />
+          <Property Name="MonthsOfYear" Type="String" MaxLength="48" FixedLength="false" Unicode="false" />
+          <Property Name="DaysOfMonth" Type="String" MaxLength="131" FixedLength="false" Unicode="false" />
+          <Property Name="TargetedWeek" Type="String" MaxLength="21" FixedLength="false" Unicode="false" />
+          <Property Name="DaysOfTargetedWeek" Type="String" MaxLength="28" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="SPR_Tasks" Relationship="Self.FK_SPR_Trigger_Monthly_TaskID" FromRole="SPR_Trigger_Monthly" ToRole="SPR_Tasks" />
+        </EntityType>
+        <EntityType Name="SPR_Trigger_Once">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskID" Type="Int64" Nullable="false" />
+          <Property Name="StartDateTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="SPR_Tasks" Relationship="Self.FK_SPR_Trigger_Once_TaskID" FromRole="SPR_Trigger_Once" ToRole="SPR_Tasks" />
+        </EntityType>
+        <EntityType Name="SPR_Trigger_Weekly">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskID" Type="Int64" Nullable="false" />
+          <Property Name="StartDateTime" Type="DateTime" Precision="3" />
+          <Property Name="WeekFrequency" Type="Int32" Nullable="false" />
+          <Property Name="DaysOfWeek" Type="String" MaxLength="28" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="SPR_Tasks" Relationship="Self.FK_SPR_Trigger_Weekly_TaskID" FromRole="SPR_Trigger_Weekly" ToRole="SPR_Tasks" />
+        </EntityType>
+        <Association Name="FK_SPR_DataFeed_ReportID">
+          <End Role="SPR_Reports" Type="Self.SPR_Reports" Multiplicity="1" />
+          <End Role="SPR_DataFeed" Type="Self.SPR_DataFeed" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="SPR_Reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SPR_DataFeed">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SPR_ReportAssets_ReportID">
+          <End Role="SPR_Reports" Type="Self.SPR_Reports" Multiplicity="1" />
+          <End Role="SPR_ReportAssets" Type="Self.SPR_ReportAssets" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="SPR_Reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SPR_ReportAssets">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SPR_ReportSettings_ReportID">
+          <End Role="SPR_Reports" Type="Self.SPR_Reports" Multiplicity="1" />
+          <End Role="SPR_ReportSettings" Type="Self.SPR_ReportSettings" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="SPR_Reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SPR_ReportSettings">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SPR_Tasks_ReportID">
+          <End Role="SPR_Reports" Type="Self.SPR_Reports" Multiplicity="1" />
+          <End Role="SPR_Tasks" Type="Self.SPR_Tasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SPR_Reports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SPR_Tasks">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SPR_Trigger_Daily_TaskID">
+          <End Role="SPR_Tasks" Type="Self.SPR_Tasks" Multiplicity="1" />
+          <End Role="SPR_Trigger_Daily" Type="Self.SPR_Trigger_Daily" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SPR_Tasks">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SPR_Trigger_Daily">
+              <PropertyRef Name="TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SPR_Trigger_Monthly_TaskID">
+          <End Role="SPR_Tasks" Type="Self.SPR_Tasks" Multiplicity="1" />
+          <End Role="SPR_Trigger_Monthly" Type="Self.SPR_Trigger_Monthly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SPR_Tasks">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SPR_Trigger_Monthly">
+              <PropertyRef Name="TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SPR_Trigger_Once_TaskID">
+          <End Role="SPR_Tasks" Type="Self.SPR_Tasks" Multiplicity="1" />
+          <End Role="SPR_Trigger_Once" Type="Self.SPR_Trigger_Once" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SPR_Tasks">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SPR_Trigger_Once">
+              <PropertyRef Name="TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SPR_Trigger_Weekly_TaskID">
+          <End Role="SPR_Tasks" Type="Self.SPR_Tasks" Multiplicity="1" />
+          <End Role="SPR_Trigger_Weekly" Type="Self.SPR_Trigger_Weekly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SPR_Tasks">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SPR_Trigger_Weekly">
+              <PropertyRef Name="TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="csdbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="SPR_DataFeed" EntityType="Self.SPR_DataFeed" />
+          <EntitySet Name="SPR_ReportAssets" EntityType="Self.SPR_ReportAssets" />
+          <EntitySet Name="SPR_Reports" EntityType="Self.SPR_Reports" />
+          <EntitySet Name="SPR_ReportSettings" EntityType="Self.SPR_ReportSettings" />
+          <EntitySet Name="SPR_Tasks" EntityType="Self.SPR_Tasks" />
+          <EntitySet Name="SPR_Trigger_Daily" EntityType="Self.SPR_Trigger_Daily" />
+          <EntitySet Name="SPR_Trigger_Monthly" EntityType="Self.SPR_Trigger_Monthly" />
+          <EntitySet Name="SPR_Trigger_Once" EntityType="Self.SPR_Trigger_Once" />
+          <EntitySet Name="SPR_Trigger_Weekly" EntityType="Self.SPR_Trigger_Weekly" />
+          <AssociationSet Name="FK_SPR_DataFeed_ReportID" Association="Self.FK_SPR_DataFeed_ReportID">
+            <End Role="SPR_Reports" EntitySet="SPR_Reports" />
+            <End Role="SPR_DataFeed" EntitySet="SPR_DataFeed" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SPR_ReportAssets_ReportID" Association="Self.FK_SPR_ReportAssets_ReportID">
+            <End Role="SPR_Reports" EntitySet="SPR_Reports" />
+            <End Role="SPR_ReportAssets" EntitySet="SPR_ReportAssets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SPR_ReportSettings_ReportID" Association="Self.FK_SPR_ReportSettings_ReportID">
+            <End Role="SPR_Reports" EntitySet="SPR_Reports" />
+            <End Role="SPR_ReportSettings" EntitySet="SPR_ReportSettings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SPR_Tasks_ReportID" Association="Self.FK_SPR_Tasks_ReportID">
+            <End Role="SPR_Reports" EntitySet="SPR_Reports" />
+            <End Role="SPR_Tasks" EntitySet="SPR_Tasks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SPR_Trigger_Daily_TaskID" Association="Self.FK_SPR_Trigger_Daily_TaskID">
+            <End Role="SPR_Tasks" EntitySet="SPR_Tasks" />
+            <End Role="SPR_Trigger_Daily" EntitySet="SPR_Trigger_Daily" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SPR_Trigger_Monthly_TaskID" Association="Self.FK_SPR_Trigger_Monthly_TaskID">
+            <End Role="SPR_Tasks" EntitySet="SPR_Tasks" />
+            <End Role="SPR_Trigger_Monthly" EntitySet="SPR_Trigger_Monthly" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SPR_Trigger_Once_TaskID" Association="Self.FK_SPR_Trigger_Once_TaskID">
+            <End Role="SPR_Tasks" EntitySet="SPR_Tasks" />
+            <End Role="SPR_Trigger_Once" EntitySet="SPR_Trigger_Once" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SPR_Trigger_Weekly_TaskID" Association="Self.FK_SPR_Trigger_Weekly_TaskID">
+            <End Role="SPR_Tasks" EntitySet="SPR_Tasks" />
+            <End Role="SPR_Trigger_Weekly" EntitySet="SPR_Trigger_Weekly" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SPRModelsStoreContainer" CdmEntityContainer="csdbEntities">
+          <EntitySetMapping Name="SPR_DataFeed">
+            <EntityTypeMapping TypeName="SPRModels.SPR_DataFeed">
+              <MappingFragment StoreEntitySet="SPR_DataFeed">
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="StatementText" ColumnName="StatementText" />
+                <ScalarProperty Name="LiveReportID" ColumnName="LiveReportID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SPR_ReportAssets">
+            <EntityTypeMapping TypeName="SPRModels.SPR_ReportAssets">
+              <MappingFragment StoreEntitySet="SPR_ReportAssets">
+                <ScalarProperty Name="IsFromDesign" ColumnName="IsFromDesign" />
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="PDF" ColumnName="PDF" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SPR_Reports">
+            <EntityTypeMapping TypeName="SPRModels.SPR_Reports">
+              <MappingFragment StoreEntitySet="SPR_Reports">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SPR_ReportSettings">
+            <EntityTypeMapping TypeName="SPRModels.SPR_ReportSettings">
+              <MappingFragment StoreEntitySet="SPR_ReportSettings">
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="SettingText" ColumnName="SettingText" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SPR_Tasks">
+            <EntityTypeMapping TypeName="SPRModels.SPR_Tasks">
+              <MappingFragment StoreEntitySet="SPR_Tasks">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SPR_Trigger_Daily">
+            <EntityTypeMapping TypeName="SPRModels.SPR_Trigger_Daily">
+              <MappingFragment StoreEntitySet="SPR_Trigger_Daily">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="StartDateTime" ColumnName="StartDateTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SPR_Trigger_Monthly">
+            <EntityTypeMapping TypeName="SPRModels.SPR_Trigger_Monthly">
+              <MappingFragment StoreEntitySet="SPR_Trigger_Monthly">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="StartDateTime" ColumnName="StartDateTime" />
+                <ScalarProperty Name="IsModeDays" ColumnName="IsModeDays" />
+                <ScalarProperty Name="IsModeOn" ColumnName="IsModeOn" />
+                <ScalarProperty Name="MonthsOfYear" ColumnName="MonthsOfYear" />
+                <ScalarProperty Name="DaysOfMonth" ColumnName="DaysOfMonth" />
+                <ScalarProperty Name="TargetedWeek" ColumnName="TargetedWeek" />
+                <ScalarProperty Name="DaysOfTargetedWeek" ColumnName="DaysOfTargetedWeek" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SPR_Trigger_Once">
+            <EntityTypeMapping TypeName="SPRModels.SPR_Trigger_Once">
+              <MappingFragment StoreEntitySet="SPR_Trigger_Once">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="StartDateTime" ColumnName="StartDateTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SPR_Trigger_Weekly">
+            <EntityTypeMapping TypeName="SPRModels.SPR_Trigger_Weekly">
+              <MappingFragment StoreEntitySet="SPR_Trigger_Weekly">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="StartDateTime" ColumnName="StartDateTime" />
+                <ScalarProperty Name="WeekFrequency" ColumnName="WeekFrequency" />
+                <ScalarProperty Name="DaysOfWeek" ColumnName="DaysOfWeek" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="6eb33e83d092438ea6ba7e70b0085bca" Name="Diagram1">
+        <EntityTypeShape EntityType="SPRModels.SPR_DataFeed" Width="1.5" PointX="3" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPRModels.SPR_ReportAssets" Width="1.5" PointX="3" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPRModels.SPR_Reports" Width="1.5" PointX="0.75" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPRModels.SPR_ReportSettings" Width="1.5" PointX="3" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPRModels.SPR_Tasks" Width="1.5" PointX="3" PointY="13.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPRModels.SPR_Trigger_Daily" Width="1.5" PointX="5.25" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPRModels.SPR_Trigger_Monthly" Width="1.5" PointX="5.25" PointY="11.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPRModels.SPR_Trigger_Once" Width="1.5" PointX="5.25" PointY="15.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPRModels.SPR_Trigger_Weekly" Width="1.5" PointX="5.25" PointY="18.125" IsExpanded="true" />
+        <AssociationConnector Association="SPRModels.FK_SPR_DataFeed_ReportID" ManuallyRouted="false" />
+        <AssociationConnector Association="SPRModels.FK_SPR_ReportAssets_ReportID" ManuallyRouted="false" />
+        <AssociationConnector Association="SPRModels.FK_SPR_ReportSettings_ReportID" ManuallyRouted="false" />
+        <AssociationConnector Association="SPRModels.FK_SPR_Tasks_ReportID" ManuallyRouted="false" />
+        <AssociationConnector Association="SPRModels.FK_SPR_Trigger_Daily_TaskID" ManuallyRouted="false" />
+        <AssociationConnector Association="SPRModels.FK_SPR_Trigger_Monthly_TaskID" ManuallyRouted="false" />
+        <AssociationConnector Association="SPRModels.FK_SPR_Trigger_Once_TaskID" ManuallyRouted="false" />
+        <AssociationConnector Association="SPRModels.FK_SPR_Trigger_Weekly_TaskID" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

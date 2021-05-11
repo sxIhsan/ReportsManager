@@ -8,40 +8,7 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <!--<div class="navbar navbar-dark bg-primary navbar-fixed-top">
-        <div class="container">-->
-    @*<div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                <li>@Html.ActionLink("About", "About", "Home")</li>
-                <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-            </ul>
-        </div>*@
-    <!--</div>
-    </div>-->
-    <div class="menubar-cs">
-        <div class="row">
-            <div class="col-sm-4 align-middle">
-                <a href="" id="menubar-home"><img class="menubar-img" src="~/Images/home.svg" height="45px" /></a>
-                <a href="" id="menubar-email"><img class="menubar-img" src="~/Images/emailbrowsericon.svg" height="45px" /></a>
-            </div>
-            <div class="col-sm-4 text-center align-middle">
-                <img class="align-middle" src="~/Images/header_content_server.11e10d64.svg" height="30px" id="cs-svg" />
-            </div>
-            <div class="col-sm-4 align-middle">
-
-            </div>
-        </div>
-    </div>
-    <div class="container body-content">
+    <div class="container body-content" style="padding:0%;width:90%">
         @RenderBody()
         <hr />
         <footer>

@@ -4,100 +4,161 @@
     ViewBag.Title = "Reports";
 }
 
-<h2>Reports</h2>
+<div class="banner">
+    <h2>
+        Reports
+    </h2>
+</div>
+<br />
 
+<div class="cards">
+    @foreach (var item in Model)
+    {
+        <div class="card">
+            <div>
+                @{
+                    item.Name += ": ";
+                }
 
-<table class="table">
-    <tr>
-        <th>
+                <span class="subtittle">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </span>
+                <br />
+                @{
+                    string imgSrc = "";
+                    if (item.SPR_ReportAssets != null)
+                    {
+                        var base64 = Convert.ToBase64String(item.SPR_ReportAssets.Image);
+                        imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                    }
+                }
+                @if (string.IsNullOrWhiteSpace(imgSrc) == false)
+                {
+                    <img src="@imgSrc" class="img-thumbnail" style="width:350px;" />
+                }
+                <br />
+                <div class="smaller">
+                    <a class="btn btn-primary btnmargin" onclick="location.href='@Url.Action("Edit", "Reports", new { id=item.ID})'">
+                        <i class="glyphicon glyphicon-edit"></i> Edit
+                    </a>
+                    @*<input type="button" class="btn btn-secondary" value="Edit" onclick="location.href='@Url.Action("Edit", "Reports", new { id=item.ID})'" />*@
+                    <a class="btn btn-info btnmargin" onclick="location.href='@Url.Action("Design", "Reports", new { id=item.ID})'">
+                        <i class="glyphicon glyphicon-stats"></i> Design
+                    </a>
+                    @*<input type="button" class="btn btn-info" value="Design" onclick="location.href='@Url.Action("Design", "Reports", new { id=item.ID})'" />*@
+                    <a class="btn btn-success btnmargin" onclick="window.open('@Url.Action("View", "Reports", new { id=item.ID})', '_blank')">
+                        <i class="glyphicon glyphicon-eye-open"></i> View
+                    </a>
+                    @*<input type="button" class="btn btn-success" value="View" onclick="window.open('@Url.Action("View", "Reports", new { id=item.ID})', '_blank')" />*@
+                    <a class="btn btn-danger btnmargin" onclick="location.href='@Url.Action("Delete", "Reports", new { id=item.ID})'">
+                        <i class="glyphicon glyphicon-minus"></i> Delete
+                    </a>
+                    @*<input type="button" class="btn btn-danger" value="Delete" onclick="location.href='@Url.Action("Delete", "Reports", new { id=item.ID})'" />*@
+                    <a class="btn btn-default btnmargin text-primary" onclick="location.href='@Url.Action("Index", "Tasks", new { reportid=item.ID})'">
+                        <i class="glyphicon glyphicon-time"></i> Schedule
+                    </a>
+                </div>
+                <br />
+                @{
+                    string description = "hello";
+                    if (item.SPR_Tasks != null && item.SPR_Tasks.Count > 0)
+                    {
+                        //if (item.SPR_DataFeed.Source.Equals("statement", StringComparison.OrdinalIgnoreCase))
+                        //{
+                        //    item.SPR_DataFeed.Source = "Uses SQL Statement";
+                        //}
+                        //else
+                        //{
+                        //    item.SPR_DataFeed.Source = "Uses Live Report";
+                        //}
+                    }
+                    else
+                    {
+                        description = "Not scheduled";
+                    }
+                }
+                <span>@description</span>
+
+                @*@Html.DisplayFor(modelItem => item.SPR_DataFeed.Source)*@
+            </div>
+        </div>
+    }
+
+    <div class="card glyphicon-object-align-vertical">
+        <div>
             <a class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Reports")'">
                 <i class="glyphicon glyphicon-plus"></i> Add New Report
             </a>
-            @*@Html.DisplayNameFor(model => model.Name)*@
-        </th>
-        <th></th>
-        <th></th>
-        <th></th>
-    </tr>
+        </div>
+    </div>
+</div>
 
-@foreach (var item in Model) {
-<tr>
-    @{ 
-        item.Name += ": ";
-    }
-    <td class="vert-aligned">
-        <span style="font-weight:bold;">
-            @Html.DisplayFor(modelItem => item.Name)
-        </span>
-    </td>
-    <td class="vert-aligned">
-        @{
-            string description = "hello";
-            if (item.SPR_Tasks != null && item.SPR_Tasks.Count>0)
-            {
-                //if (item.SPR_DataFeed.Source.Equals("statement", StringComparison.OrdinalIgnoreCase))
-                //{
-                //    item.SPR_DataFeed.Source = "Uses SQL Statement";
-                //}
-                //else
-                //{
-                //    item.SPR_DataFeed.Source = "Uses Live Report";
-                //}
-            }
-            else
-            {
-                description = "Not scheduled";
-            }
-        }
-        <span>@description</span>
+@*@Html.DisplayNameFor(model => model.Name)*@
 
-        @*@Html.DisplayFor(modelItem => item.SPR_DataFeed.Source)*@
-
-    </td>
-    <td class="vert-aligned">
-        <a class="btn btn-primary btnmargin" onclick="location.href='@Url.Action("Edit", "Reports", new { id=item.ID})'">
-            <i class="glyphicon glyphicon-edit"></i> Edit
-        </a>
-        @*<input type="button" class="btn btn-secondary" value="Edit" onclick="location.href='@Url.Action("Edit", "Reports", new { id=item.ID})'" />*@
-        <a class="btn btn-info btnmargin" onclick="location.href='@Url.Action("Design", "Reports", new { id=item.ID})'">
-            <i class="glyphicon glyphicon-stats"></i> Design
-        </a>
-        @*<input type="button" class="btn btn-info" value="Design" onclick="location.href='@Url.Action("Design", "Reports", new { id=item.ID})'" />*@
-        <a class="btn btn-success btnmargin" onclick="window.open('@Url.Action("View", "Reports", new { id=item.ID})', '_blank')">
-            <i class="glyphicon glyphicon-eye-open"></i> View
-        </a>
-        @*<input type="button" class="btn btn-success" value="View" onclick="window.open('@Url.Action("View", "Reports", new { id=item.ID})', '_blank')" />*@
-        <a class="btn btn-danger btnmargin"  onclick="location.href='@Url.Action("Delete", "Reports", new { id=item.ID})'">
-            <i class="glyphicon glyphicon-minus"></i> Delete
-        </a>
-        @*<input type="button" class="btn btn-danger" value="Delete" onclick="location.href='@Url.Action("Delete", "Reports", new { id=item.ID})'" />*@
-        <a class="btn btn-default btnmargin text-primary" onclick="location.href='@Url.Action("Index", "Tasks", new { reportid=item.ID})'">
-            <i class="glyphicon glyphicon-time"></i> Schedule
-        </a>
-    </td>
-    <td class="vert-aligned">
-        @{
-            string imgSrc = "";
-            if (item.SPR_ReportAssets != null)
-            {
-                var base64 = Convert.ToBase64String(item.SPR_ReportAssets.Image);
-                imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-            }
-        }
-        @if (string.IsNullOrWhiteSpace(imgSrc) == false)
-        {
-            <img src="@imgSrc" class="img-thumbnail rounded" style="width:350px;" />
-        }
-    </td>
-</tr>
-}
-
-</table>
 <style>
     .table tbody > tr > td.vert-aligned {
         vertical-align: middle;
     }
-    .btnmargin{
+
+    .btnmargin {
         margin: 3px;
+        zoom: 75%;
+    }
+
+    .banner {
+        width: 100%;
+        height: 44px;
+        color: black;
+    }
+
+    .btn:hover {
+        background-color: RoyalBlue;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        padding: 1rem;
+    }
+
+    .card {
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2); /* this adds the "card" effect */
+        text-align: center;
+        background-color: white;
+        color: #f1f1f1;
+        padding: 1rem;
+        height: auto;
+        border: 2px solid;
+        border-radius: 15px;
+    }
+
+    .cards {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-gap: 1rem;
+    }
+
+    .subtittle {
+        font-weight: bold;
+        font-style: normal;
+        text-decoration: underline;
+        color: black;
+        font-size: 20px;
+    }
+
+    @@media (min-width: 600px) {
+        .cards {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @@media (min-width: 900px) {
+        .cards {
+            grid-template-columns: repeat(3, 1fr);
+        }
     }
 </style>

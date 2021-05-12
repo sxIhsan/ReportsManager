@@ -6,7 +6,6 @@
             <a class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Reports")'">
                 <i class="glyphicon glyphicon-plus"></i> Add New Report
             </a>
-            @*@Html.DisplayNameFor(model => model.Name)*@
         </th>
         <th></th>
         <th></th>
@@ -41,14 +40,6 @@
                     string description = "hello";
                     if (item.SPR_Tasks != null && item.SPR_Tasks.Count > 0)
                     {
-                        //if (item.SPR_DataFeed.Source.Equals("statement", StringComparison.OrdinalIgnoreCase))
-                        //{
-                        //    item.SPR_DataFeed.Source = "Uses SQL Statement";
-                        //}
-                        //else
-                        //{
-                        //    item.SPR_DataFeed.Source = "Uses Live Report";
-                        //}
                     }
                     else
                     {
@@ -59,24 +50,18 @@
                 <br />
                 
                 <div style="zoom:120%">
-                    @*@Html.DisplayFor(modelItem => item.SPR_DataFeed.Source)*@
-
                     <a class="btn btn-primary btnmargin" onclick="location.href='@Url.Action("Edit", "Reports", new { id=item.ID})'">
                         <i class="glyphicon glyphicon-edit"></i> Edit
                     </a>
-                    @*<input type="button" class="btn btn-secondary" value="Edit" onclick="location.href='@Url.Action("Edit", "Reports", new { id=item.ID})'" />*@
                     <a class="btn btn-info btnmargin" onclick="location.href='@Url.Action("Design", "Reports", new { id=item.ID})'">
                         <i class="glyphicon glyphicon-stats"></i> Design
                     </a>
-                    @*<input type="button" class="btn btn-info" value="Design" onclick="location.href='@Url.Action("Design", "Reports", new { id=item.ID})'" />*@
                     <a class="btn btn-success btnmargin" onclick="window.open('@Url.Action("View", "Reports", new { id=item.ID})', '_blank')">
                         <i class="glyphicon glyphicon-eye-open"></i> View
                     </a>
-                    @*<input type="button" class="btn btn-success" value="View" onclick="window.open('@Url.Action("View", "Reports", new { id=item.ID})', '_blank')" />*@
                     <a class="btn btn-danger btnmargin" onclick="location.href='@Url.Action("Delete", "Reports", new { id=item.ID})'">
                         <i class="glyphicon glyphicon-minus"></i> Delete
                     </a>
-                    @*<input type="button" class="btn btn-danger" value="Delete" onclick="location.href='@Url.Action("Delete", "Reports", new { id=item.ID})'" />*@
                     <a class="btn btn-default btnmargin text-primary" onclick="location.href='@Url.Action("Index", "Tasks", new { reportid=item.ID})'">
                         <i class="glyphicon glyphicon-time"></i> Schedule
                     </a>
